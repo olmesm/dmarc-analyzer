@@ -4,7 +4,7 @@
 
 # DMARC Report Analyzer
 
-[![main workflow](actions/workflows/main.yml/badge.svg)](actions/workflows/main.yml)
+[![main workflow](https://github.com/olmesm/dmarc-analyzer/actions/workflows/main.yml/badge.svg)](https://github.com/olmesm/dmarc-analyzer/actions/workflows/main.yml)
 
 ---
 
