@@ -18,3 +18,6 @@ jobs:
       - run: npm run build
       - run: echo "dmarc-analyzer.ohmybuck.com" > dist/CNAME
       - run: npx surge dist
+        env:
+          SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
+          SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
