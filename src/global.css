@@ -31,3 +31,11 @@ button[role="button"] {
 .justify-center {
   justify-content: center;
 }
+
+.wrap {
+  width: 100%;
+}
+
+.pointer {
+  cursor: pointer;
+}

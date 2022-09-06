@@ -1,8 +1,32 @@
 import { useState } from "react";
 import X2JS from "x2js";
+import { Table } from "./components/Table";
 import { getMetaData, getPolicy, getRecords } from "./utils/dmarc-parse";
+import copy from "copy-text-to-clipboard";
 
 const x2js = new X2JS();
+
+const handleCopy = (body: string) => () => {
+  copy(body);
+};
+
+const Accordion: React.FC<{ title: string; body: string }> = ({
+  title,
+  body,
+}) => (
+  <details>
+    <summary className="outline" role="button">
+      {title}
+    </summary>
+    <code
+      onClick={handleCopy(body)}
+      className="wrap pointer"
+      data-tooltip="Copy to clipboard"
+    >
+      {body}
+    </code>
+  </details>
+);
 
 export function App() {
   const [blob, setBlob] = useState<Blob>();
@@ -30,12 +54,25 @@ export function App() {
       </form>
 
       <div>
-        <code>JSON: {JSON.stringify(blob)}</code>
-      </div>
-      <div>
-        <code>getMetaData: {JSON.stringify(getMetaData(blob))}</code>
-        <code>getPolicy: {JSON.stringify(getPolicy(blob))}</code>
-        <code>getRecords: {JSON.stringify(getRecords(blob))}</code>
+        <Table data={getRecords(blob)} />
+
+        {blob && (
+          <>
+            <Accordion
+              title={"Metadata"}
+              body={JSON.stringify(getMetaData(blob))}
+            />
+            <Accordion
+              title={"Policy"}
+              body={JSON.stringify(getPolicy(blob))}
+            />
+            <Accordion
+              title={"Records"}
+              body={JSON.stringify(getRecords(blob))}
+            />
+            <Accordion title={"Full"} body={JSON.stringify(blob)} />
+          </>
+        )}
       </div>
     </main>
   );
