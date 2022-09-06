@@ -36,6 +36,16 @@ button[role="button"] {
   width: 100%;
 }
 
+[data-tooltip].pointer,
 .pointer {
   cursor: pointer;
+}
+
+.small-font {
+  font-size: calc(0.6 * var(--font-size));
+}
+
+.small-padding {
+  /* padding-left: calc(var(--spacing) / 4);
+  padding-right: calc(var(--spacing) / 4); */
 }

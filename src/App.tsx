@@ -1,35 +1,19 @@
 import { useState } from "react";
 import X2JS from "x2js";
-import { Table } from "./components/Table";
 import { getMetaData, getPolicy, getRecords } from "./utils/dmarc-parse";
-import copy from "copy-text-to-clipboard";
+
+import { Table } from "./components/Table";
+import { Modal } from "./components/Modal";
+import { Accordion } from "./components/Accordion";
+import { Header } from "./components/Header";
 
 const x2js = new X2JS();
 
-const handleCopy = (body: string) => () => {
-  copy(body);
-};
-
-const Accordion: React.FC<{ title: string; body: string }> = ({
-  title,
-  body,
-}) => (
-  <details>
-    <summary className="outline" role="button">
-      {title}
-    </summary>
-    <code
-      onClick={handleCopy(body)}
-      className="wrap pointer"
-      data-tooltip="Copy to clipboard"
-    >
-      {body}
-    </code>
-  </details>
-);
+const somewhatPretty = (blob: any) => JSON.stringify(blob, null, 2);
 
 export function App() {
   const [blob, setBlob] = useState<Blob>();
+  const [modalBody, setModalBody] = useState("");
 
   const handleSubmit = (e: React.SyntheticEvent): void => {
     e.preventDefault();
@@ -39,11 +23,20 @@ export function App() {
     event.target.files[0]
       ?.text()
       .then((t: string) => x2js.xml2js(t))
-      .then(setBlob);
+      .then(setBlob)
+      .catch((e: Error) => {
+        console.error(e);
+
+        setModalBody("Error parsing file");
+      });
   };
 
   return (
     <main className="container-fluid">
+      <Header />
+
+      <Modal body={modalBody} setBody={setModalBody} />
+
       <form onSubmit={handleSubmit}>
         <input
           type="file"
@@ -53,27 +46,35 @@ export function App() {
         />
       </form>
 
-      <div>
-        <Table data={getRecords(blob)} />
+      {blob && (
+        <div>
+          <Table data={getRecords(blob)} />
+          <hr />
 
-        {blob && (
-          <>
+          <article>
             <Accordion
               title={"Metadata"}
-              body={JSON.stringify(getMetaData(blob))}
+              body={somewhatPretty(getMetaData(blob))}
+              copyCallback={setModalBody}
             />
             <Accordion
               title={"Policy"}
-              body={JSON.stringify(getPolicy(blob))}
+              body={somewhatPretty(getPolicy(blob))}
+              copyCallback={setModalBody}
             />
             <Accordion
               title={"Records"}
-              body={JSON.stringify(getRecords(blob))}
+              body={somewhatPretty(getRecords(blob))}
+              copyCallback={setModalBody}
             />
-            <Accordion title={"Full"} body={JSON.stringify(blob)} />
-          </>
-        )}
-      </div>
+            <Accordion
+              title={"Full"}
+              body={somewhatPretty(blob)}
+              copyCallback={setModalBody}
+            />
+          </article>
+        </div>
+      )}
     </main>
   );
 }
