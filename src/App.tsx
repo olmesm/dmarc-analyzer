@@ -6,6 +6,7 @@ import { Table } from "./components/Table";
 import { Modal } from "./components/Modal";
 import { Accordion } from "./components/Accordion";
 import { Header } from "./components/Header";
+import { URL_GITHUB } from "./config";
 
 const x2js = new X2JS();
 
@@ -45,6 +46,24 @@ export function App() {
           onChange={changeHandler}
         />
       </form>
+
+      <p>
+        This is more reliable than tools like{" "}
+        <a href="https://mxtoolbox.com/DmarcReportAnalyzer.aspx">
+          mxtoolbox.com
+        </a>
+        's offering. If this is crucial, I've found using{" "}
+        <a href="https://dmarcian.com/">Dmarcian</a> offers the clearest
+        in-depth insight.
+      </p>
+
+      <p>
+        There are loads more features that could be added - such as pie charts
+        and explainers behind bounces etc.{" "}
+        <a href={URL_GITHUB}>
+          Feel free to contribute or request a feature here.
+        </a>
+      </p>
 
       {blob && (
         <div>
