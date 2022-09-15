@@ -75,8 +75,10 @@ type Record = {
   spf_result: string;
 };
 
-export const getRecords = (obj: any): Record[] =>
-  get(obj, "feedback.record", []).map(
+export const getRecords = (obj: any): Record[] => {
+  const records = [].concat(get(obj, "feedback.record", [])); // ensure is typeof array
+
+  return records.map(
     (record: any): Record => ({
       source_ip: get(record, "row.source_ip"),
       count: get(record, "row.count"),
@@ -93,3 +95,4 @@ export const getRecords = (obj: any): Record[] =>
       spf_result: get(record, "auth_results.spf.result"),
     })
   );
+};

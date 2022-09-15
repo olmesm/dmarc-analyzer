@@ -69,7 +69,6 @@ export function App() {
         <div>
           <Table data={getRecords(blob)} />
           <hr />
-
           <article>
             <Accordion
               title={"Metadata"}
