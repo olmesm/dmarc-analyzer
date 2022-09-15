@@ -35,9 +35,28 @@ type Props = {
   data: CollectionType[];
 };
 
+const SourceIpAsLink: React.FC<{ ip: string }> = ({ ip }) => {
+  return (
+    <a target="_blank" href={`https://whatismyipaddress.com/ip/${ip}`}>
+      {ip}
+    </a>
+  );
+};
+
 export const Table: React.FC<Props> = ({ data }) => {
   const [headings, ...body] = createMatrixFromCollection(
-    data.sort((a, b) => a.source_ip.localeCompare(b.source_ip)),
+    data
+      .sort((a, b) => a.source_ip.localeCompare(b.source_ip))
+      .map((i) => {
+        if (i.source_ip) {
+          return {
+            ...i,
+            source_ip: <SourceIpAsLink ip={i.source_ip as unknown as string} />,
+          };
+        }
+
+        return i;
+      }),
     HEADER_PRIORITY
   );
 
